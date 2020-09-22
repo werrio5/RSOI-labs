@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+
+  javaapp:
+          build:
+              context: .
+              dockerfile: Dockerfile.javaapp
+          restart: always
+          container_name: javaapp
