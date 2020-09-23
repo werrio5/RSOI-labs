@@ -4,4 +4,4 @@ RUN pacman -Sy
 RUN pacman -S jre11-openjdk --noconfirm
 
 COPY dockerApp/target/*.jar /deployments/app.jar
-RUN java -jar deployments/app.jar
+ENTRYPOINT ["java", "-jar", "deployments/app.jar"]
