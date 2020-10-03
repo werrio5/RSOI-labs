@@ -1,0 +1,42 @@
+version: "2"
+
+services:
+  consul:
+    container_name: 'consul'
+    command: -server -bootstrap-expect 1 -domain ${DOMAIN} -advertise 127.0.0.1 -dc dev -recursor 8.8.8.8 -ui-dir /ui -data-dir /data/consul -log-level INFO
+    image: progrium/consul
+    restart: always
+    environment:
+      SERVICE_8500_NAME: consul
+    ports:
+     - 127.0.0.1:8500:8500
+
+  nginx:
+    container_name: 'nginx'
+    image: nginx:1.15-alpine
+    network_mode: host
+    restart: always
+    volumes:
+      - /etc/nginx/
+
+  consul-template:
+    container_name: 'consul-template'
+    command: -consul-addr=localhost:8500 -wait=2s -log-level=debug -template="/etc/ctmpl/nginx.ctmpl:/etc/nginx/nginx.conf:docker kill -s HUP nginx"
+    image: alterway/consul-template-nginx:0.19
+    network_mode: host
+    restart: always
+    volumes_from:
+      - nginx
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DOMAIN:               ${DOMAIN}
+
+  registrator:
+    container_name: 'registrator'
+    image: gliderlabs/registrator
+    command: -ip 127.0.0.1 consul://localhost:8500
+    network_mode: host
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
