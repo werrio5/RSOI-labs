@@ -9,7 +9,7 @@ services:
     environment:
       SERVICE_8500_NAME: consul
     ports:
-     - 127.0.0.1:8500:8500
+     - 0.0.0.0:8500:8500
 
   nginx:
     container_name: 'nginx'
