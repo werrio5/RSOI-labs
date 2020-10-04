@@ -3,7 +3,7 @@ version: "2"
 services:
   consul:
     container_name: 'consul'
-    command: -server -bootstrap-expect 1 -domain ${DOMAIN} -advertise 127.0.0.1 -dc dev -recursor 8.8.8.8 -ui-dir /ui -data-dir /data/consul -log-level INFO
+    command: -server -bootstrap-expect 1 -advertise 127.0.0.1 -dc dev -recursor 8.8.8.8 -ui-dir /ui -data-dir /data/consul -log-level INFO
     image: progrium/consul
     restart: always
     environment:
@@ -29,14 +29,12 @@ services:
       - nginx
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      DOMAIN:               ${DOMAIN}
 
-  registrator:
-    container_name: 'registrator'
-    image: gliderlabs/registrator
-    command: -ip 127.0.0.1 consul://localhost:8500
-    network_mode: host
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
+  #registrator:
+   #container_name: 'registrator'
+    #image: gliderlabs/registrator
+    #command: -ip 127.0.0.1 consul://localhost:8500
+    #network_mode: host
+    #restart: always
+    #volumes:
+    # - /var/run/docker.sock:/tmp/docker.sock
