@@ -6,7 +6,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock
     command: -ip 192.168.122.61 consul://192.168.122.224:8500 
     restart: on-failure:5
-  app:
+  app2:
     image: python:2.7-alpine
     environment:
       SERVICE_NAME: app2
@@ -16,12 +16,12 @@ services:
       SERVICE_CHECK_TIMEOUT: 3s
     command: sh -c "echo app > /tmp/index.html; cd /tmp/; python -m SimpleHTTPServer 8080"
     ports:
-      - 8080:8081
+      - 8081:8080
     depends_on:
       - registrator
     restart: on-failure:3
     
-  app:
+  app3:
     image: python:2.7-alpine
     environment:
       SERVICE_NAME: app3
@@ -31,7 +31,7 @@ services:
       SERVICE_CHECK_TIMEOUT: 3s
     command: sh -c "echo app > /tmp/index.html; cd /tmp/; python -m SimpleHTTPServer 8080"
     ports:
-      - 8080:8082
+      - 8082:8080
     depends_on:
       - registrator
     restart: on-failure:3
