@@ -28,18 +28,3 @@ services:
     depends_on:
       - consul
     restart: on-failure:10
-  app:
-    image: python:2.7-alpine
-    env_file: .env
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: web
-      SERVICE_CHECK_HTTP: /
-      SERVICE_CHECK_INTERVAL: 5s
-      SERVICE_CHECK_TIMEOUT: 3s
-    command: sh -c "echo app > /tmp/index.html; cd /tmp/; python -m SimpleHTTPServer 8080"
-    ports:
-      - 8080:8080
-    depends_on:
-      - registrator
-    restart: on-failure:10
