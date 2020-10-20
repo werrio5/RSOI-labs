@@ -36,3 +36,12 @@ services:
       - nginx
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      
+  registrator:
+    container_name: 'registrator'
+    image: gliderlabs/registrator
+    command: -ip 127.0.0.1 consul://localhost:8500
+    network_mode: host
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
