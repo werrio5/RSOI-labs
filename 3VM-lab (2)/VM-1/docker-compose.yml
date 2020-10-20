@@ -25,17 +25,6 @@ services:
       - 80:80
     links:
       - consul
-      
-  registrator:
-    image: gliderlabs/registrator:latest
-    links:
-      - consul
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-    command: consul://consul:8500 
-    depends_on:
-      - consul
-    restart: on-failure:10
 
   consul-template:
     container_name: 'consul-template'
