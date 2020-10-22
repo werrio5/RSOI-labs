@@ -1,0 +1,20 @@
+version: '3'
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    links:
+      - consul
+    ports:
+      - "80:80"
+    labels:
+      SERVICE_IGNORE: 'yes'
+      
+  consul:
+    command: -server -bootstrap -advertise 127.0.0.1
+    image: progrium/consul
+    container_name: consul
+    labels:
+      SERVICE_IGNORE: 'yes'
+    ports:
+      - "8500:8500"
