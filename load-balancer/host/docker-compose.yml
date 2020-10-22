@@ -9,7 +9,6 @@ services:
       - "80:80"
     labels:
       SERVICE_IGNORE: 'yes'
-      
   consul:
     command: -server -bootstrap -advertise 127.0.0.1
     image: progrium/consul
@@ -18,7 +17,6 @@ services:
       SERVICE_IGNORE: 'yes'
     ports:
       - "8500:8500"
-      
   registrator:
     command: "-internal consul://consul:8500"
     image: gliderlabs/registrator:latest
@@ -27,3 +25,13 @@ services:
       - consul
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock"
+  #http:
+  #  image: nginxdemos/hello:latest
+  #  labels:
+  #    SERVICE_80_NAME: http
+  #    SERVICE_80_CHECK_HTTP: /
+  #    SERVICE_80_CHECK_INTERVAL: 5s
+  #    SERVICE_443_IGNORE: 'yes'
+  #    SERVICE_TAGS: production
+  #  ports:
+  #    - "80"
