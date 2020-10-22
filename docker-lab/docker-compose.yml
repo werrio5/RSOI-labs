@@ -8,3 +8,5 @@ services:
               dockerfile: Dockerfile.javaapp
           restart: always
           container_name: javaapp
+          ports:
+            - 8080:80
