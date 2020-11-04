@@ -45,6 +45,7 @@ public class MainClass {
 
         public void run() {
             try {
+                Logging.log();
                 readInputHeaders();
                 //index.html
                 String path = System.getProperty("user.dir") + File.separator
