@@ -1,0 +1,9 @@
+FROM archlinux/base
+
+RUN pacman -Sy jre11-openjdk filebeat --noconfirm
+
+COPY *.jar /deployments/app.jar
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT  ["/entrypoint.sh"]
