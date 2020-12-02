@@ -9,3 +9,22 @@ groups:
     annotations:
       summary: "Node Explorer instance ($instance) down"
       description: "NodeExporterDown"
+      
+- name: appAlerts
+  rules:
+  - alert: NotPrimeNumber
+    expr: application_org_acme_microprofile_metrics_PrimeNumberChecker_notPrimeNumbersCount > 0
+    for: 1s
+    labels:
+      severity: Error
+    annotations:
+      summary: "not prime number received"
+      description: "YEPP BOAT"
+- alert: 
+    expr: number3Count == 3
+    for: 1s
+    labels:
+      severity: Error
+    annotations:
+      summary: "number 3 received 3 times"
+      description: "UNACCEPTABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBLE"
