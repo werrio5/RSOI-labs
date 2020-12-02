@@ -22,15 +22,4 @@ services:
       - 9100:9100
     restart: always
     deploy:
-      mode: global
-            
-  alertmanager:
-    image: prom/alertmanager
-    ports:
-      - 9093:9093
-    volumes:
-      - ./alertmanager/:/etc/alertmanager/
-    restart: always
-    command:
-      - --config.file=/etc/alertmanager/config.yml
-      - --storage.path=/alertmanager
+      mode: global            
