@@ -2,7 +2,7 @@ scrape_configs:
   - job_name: node
     scrape_interval: 5s
     static_configs:
-    - targets: ['ip_node_explorer:9100']
+    - targets: ['192.168.1.16:8080','192.168.1.16:9100']
 rule_files:
     - './con.yml'
 alerting:
