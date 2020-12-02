@@ -24,7 +24,7 @@ groups:
 - name: RuleThree
   rules:
   - alert: Received3ThreeTimes
-    expr: number3Count == 3
+    expr: application_org_acme_microprofile_metrics_PrimeNumberChecker_number3Count == 3
     for: 1s
     labels:
       severity: Error
