@@ -2,7 +2,7 @@ version: '3.2'
 services:
   prometheus:
     image: prom/prometheus
-      volumes:
+    volumes:
         - ./prometheus:/etc/prometheus/
     command:
         - --config.file=/etc/prometheus/prometheus.yml
