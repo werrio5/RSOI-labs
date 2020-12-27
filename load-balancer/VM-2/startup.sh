@@ -9,7 +9,16 @@ export CONSUL_URL
 
 #port
 
-POST=$(comm -23 <(seq 49152 65535 | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 3)
+PORT=0
+for i in {50000..60000}
+do
+  PORT=i
+  RES=$(ss -ln src :$PORT | grep $PORT)
+  if [RES==""]
+  then
+     break    
+done
+
 echo "port " $PORT
 export PORT
 
