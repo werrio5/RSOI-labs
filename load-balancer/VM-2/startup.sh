@@ -14,7 +14,7 @@ for i in {50000..60000}
 do
   PORT=$i
   RES=$(ss -ln src :$PORT | grep $PORT)
-  if [ "${RES}" = ""]; then
+  if [ "${RES}" = "" ]; then
     break    
   fi
 done
