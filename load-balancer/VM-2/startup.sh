@@ -26,3 +26,4 @@ reg_started=$(docker ps | grep registrator)
 if [ "${reg_started}" = "" ]; 
 then docker-compose up
 else docker-compose run -p $PORT:8080 app
+fi
