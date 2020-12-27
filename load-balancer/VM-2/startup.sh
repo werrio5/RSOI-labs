@@ -14,7 +14,7 @@ for i in {50000..60000}
 do
   PORT=$i
   RES=$(ss -ln src :$PORT | grep $PORT)
-  if [$RES -eq ""]; then
+  if [ "${RES}" = ""]; then
     break    
   fi
 done
@@ -22,4 +22,7 @@ done
 echo "port " $PORT
 export PORT
 
-docker-compose up
+reg_started=$(docker ps | grep registrator)
+if [ "${reg_started}" = "" ]; 
+then docker-compose up
+else docker-compose run -p $PORT:8080 app
