@@ -4,22 +4,24 @@ services:
     image: gliderlabs/registrator:latest
     environment:
       - "EXTERNAL_IP=${EXTERNAL_IP}"
-      - "CONSUL_IP=192.168.1.8"
+      - "CONSUL_URL=${CONSUL_URL}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    command: -ip ${EXTERNAL_IP} consul://${CONSUL_IP}:8500 
+    command: -ip ${EXTERNAL_IP} ${CONSUL_URL}
     restart: on-failure:5
   app:
-    image: python:2.7-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: web
-      SERVICE_CHECK_HTTP: /
+      SERVICE_CHECK_HTTP: /health
       SERVICE_CHECK_INTERVAL: 5s
       SERVICE_CHECK_TIMEOUT: 3s
-    command: sh -c "echo app1 vm2 > /tmp/index.html; cd /tmp/; python -m SimpleHTTPServer 8080"
+      - "PORT=${PORT}
     ports:
-      - 8080:8080
+      - ${PORT}:8080
     depends_on:
       - registrator
     restart: on-failure:3
