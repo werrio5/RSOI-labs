@@ -19,7 +19,6 @@ services:
       SERVICE_CHECK_HTTP: /health
       SERVICE_CHECK_INTERVAL: 5s
       SERVICE_CHECK_TIMEOUT: 3s
-      - "PORT=${PORT}
     ports:
       - ${PORT}:8080
     depends_on:
