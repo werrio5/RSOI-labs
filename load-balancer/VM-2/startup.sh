@@ -8,15 +8,9 @@ echo "consul" $CONSUL_URL
 export CONSUL_URL
 
 #port
-import socket
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 0))
-addr = s.getsockname()
-echo "port" addr[1]
-PORT=addr[1]
-s.close()
-
+POST=$(comm -23 <(seq 49152 65535 | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 3)
+echo "port " $PORT
 export PORT
 
 docker-compose up
