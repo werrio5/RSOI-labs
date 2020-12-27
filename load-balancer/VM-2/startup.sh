@@ -12,11 +12,11 @@ export CONSUL_URL
 PORT=0
 for i in {50000..60000}
 do
-  PORT=i
+  PORT=$i
   RES=$(ss -ln src :$PORT | grep $PORT)
-  if [RES==""]
-  then
-     break    
+  if [$RES -eq ""]; then
+    break    
+  fi
 done
 
 echo "port " $PORT
