@@ -1,0 +1,13 @@
+  
+global:
+  scrape_interval: 35s
+  evaluation_interval: 35s
+  scrape_timeout: 35s  
+
+scrape_configs:
+  - job_name: 'consul_app'
+    consul_sd_configs:
+    - server: 'consul.service.consul:8500'
+      services:
+        - 'microservices'
+      refresh_interval: 5s
