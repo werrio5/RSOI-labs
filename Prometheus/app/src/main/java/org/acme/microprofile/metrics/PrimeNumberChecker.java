@@ -20,7 +20,7 @@ public class PrimeNumberChecker {
     private long invalidNumbersCount = 0;
 
     @GET
-    @Path("/input/{number}")
+    @Path("{number}")
     @Produces("text/plain")
     @Counted(name = "performedChecks", description = "How many primality checks have been performed.")
     @Timed(name = "checksTimer", description = "A measure how long it takes to perform the primality test.", unit = MetricUnits.MILLISECONDS)
