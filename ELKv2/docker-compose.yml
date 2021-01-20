@@ -1,39 +1,70 @@
-# Launch Elasticsearch
-version: '3.2'
-
-services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-    networks:
-      - elk
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash-oss:6.8.2
-    volumes:
-      - "./logstash/gelf.conf:/usr/share/logstash/pipeline/gelf.conf:ro"
-    ports:
-      - "12201:12201/udp"
-      - "5000:5000"
-      - "9600:9600"
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.8.2
-    ports:
-      - "5601:5601"
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
+version: '3'
 
 networks:
-  elk:
-    driver: bridge
+    elknetwork:
+
+services:
+  logstash:
+    image: logstash:7.9.3
+    container_name: logstash
+    volumes:
+     - "./logstash/logstash.conf:/etc/logstash/logstash.conf:ro"
+    ports:
+     - 5046:5046
+     - 12201-12203:12201-12203/udp
+     - 9600:9600        
+    networks:
+     - elknetwork   
+    environment:
+     - SERVICE_NAME=logstash
+     - SERVICE_TAGS=elk
+     - SERVICE_12201_IGNORE=true
+     - SERVICE_12202_IGNORE=true
+     - SERVICE_12203_IGNORE=true
+     - SERVICE_9600_NAME=logstash
+     - SERVICE_5046_IGNORE=true
+     - SERVICE_CHECK_HTTP=/?pretty/
+     - SERVICE_CHECK_INTERVAL=10s
+     - SERVICE_CHECK_TIMEOUT=3s
+     - "LS_JAVA_OPTS= -Xms512m -Xmx512m"
+     - "XPACK_MONITORING_ENABLED= false"
+    command: logstash -f /etc/logstash/logstash.conf
+    links: 
+        - es01  
+  es01:
+    image: elasticsearch:7.9.3
+    container_name: es01
+    networks:
+     - elknetwork
+    environment:
+     - SERVICE_NAME=elasticsearch
+     - SERVICE_TAGS=elk
+     - SERVICE_9300_IGNORE=true
+     - SERVICE_9200_NAME=elasticsearch
+     - SERVICE_CHECK_HTTP=/_cluster/health/
+     - SERVICE_CHECK_INTERVAL=10s
+     - SERVICE_CHECK_TIMEOUT=3s
+     - node.name=es01
+     - cluster.name=es-docker-cluster
+     - discovery.seed_hosts=es01,es02
+     - cluster.initial_master_nodes=es01
+     - "ES_JAVA_OPTS= -Xms512m -Xmx512m"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300 
+  kib01:
+    image: kibana:7.9.3
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+     - SERVICE_NAME=kibana
+     - SERVICE_TAGS=elk
+     - SERVICE_CHECK_HTTP=/api/status/
+     - SERVICE_CHECK_INTERVAL=10s  
+     - ELASTICSEARCH_URL=http://es01:9200
+     - ELASTICSEARCH_HOSTS=http://es01:9200
+    networks:
+      - elknetwork
