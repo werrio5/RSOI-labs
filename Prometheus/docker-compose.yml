@@ -29,7 +29,6 @@ services:
       SERVICE_IGNORE: 'yes'
     ports:
       - "8500:8500"
-      version: '3'
       
   nginx:
     build: ./nginx
