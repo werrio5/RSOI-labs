@@ -5,9 +5,10 @@ global:
   scrape_timeout: 35s  
 
 scrape_configs:
-  - job_name: 'consul_app'
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: 'consul'
     consul_sd_configs:
-    - server: 'consul.service.consul:8500'
-      services:
-        - 'microservices'
-      refresh_interval: 5s
+      - server: '192.168.1.15:8500'
