@@ -1,0 +1,26 @@
+version: '2'
+services:
+  registrator:
+    image: gliderlabs/registrator:latest
+    environment:
+      - "EXTERNAL_IP=${EXTERNAL_IP}"
+      - "CONSUL_URL=${CONSUL_URL}"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    command: -ip ${EXTERNAL_IP} ${CONSUL_URL}
+    restart: on-failure:5
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: web
+      SERVICE_CHECK_HTTP: /health
+      SERVICE_CHECK_INTERVAL: 5s
+      SERVICE_CHECK_TIMEOUT: 3s
+    ports:
+      - 8080
+    depends_on:
+      - registrator
+    restart: on-failure:3
